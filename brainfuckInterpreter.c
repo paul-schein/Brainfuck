@@ -28,7 +28,7 @@ void interpret(char *brainfuck, char debug)
     Node *bfInstance = createNewNode();
     if (debug)
     {
-        printf("  [Value | Character | Index]\n  ");
+        printf("%12s %10s | %10s | %10s ]\n","[", "Value", "Character", "Index");
         printDebugMessage(bfInstance);
     }
     interpretSection(brainfuck, &bfInstance, debug);
@@ -42,7 +42,9 @@ char *interpretSection(char *brainfuck, Node **bfInstance, char debug)
         switch (*brainfuckIterator)
         {
         case '.':
-            printf("%c", (*bfInstance)->value);
+            if(!debug){
+                printf("%c", (*bfInstance)->value);
+            }
             break;
         case ',':
             (*bfInstance)->value = getchar();
@@ -90,14 +92,14 @@ char *interpretSection(char *brainfuck, Node **bfInstance, char debug)
 
 void printDebugMessage(Node *bfInstance)
 {
-    printf(" %10s", "[");
+    printf("%10s", "[");
     DEBUG_COLOR(35)
-    printf(" %d | ", bfInstance->value);
+    printf("%10d | ", bfInstance->value);
     DEBUG_COLOR(31);
 
-    printf("%s | ", getNonVisualChars(bfInstance));
+    printf("%10s | ", getNonVisualChars(bfInstance));
     DEBUG_COLOR(32)
-    printf("%d ", bfInstance->index);
+    printf("%10d ", bfInstance->index);
     DEBUG_COLOR(39)
     printf("]\n");
 }
