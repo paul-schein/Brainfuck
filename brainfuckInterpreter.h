@@ -5,6 +5,8 @@
 
 #define increment(bfInstance) bfInstance->value++
 #define decrement(bfInstance) bfInstance->value--
+#define DEBUG_COLOR(COL) printf("\x1b[%dm",COL);
+
 
 struct structNode  {
     int value;

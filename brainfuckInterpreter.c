@@ -2,8 +2,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define DEBUG_COLOR(COL) printf("\x1b[%dm",COL);
-
 int main(int argc, char **argv) {
     if (argc < 2) {
         return 1;
