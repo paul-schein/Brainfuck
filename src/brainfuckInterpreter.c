@@ -39,32 +39,41 @@ char *interpretSection(char *brainfuck, Node **bfInstance, char debug){
             if(!debug){
                 printf("%c", (*bfInstance)->value);
             }
+            DEBUG_COLOR(35)
             break;
         case ',':
             (*bfInstance)->value = getchar();
+            DEBUG_COLOR(35)
             break;
         case '+':
             increment((*bfInstance));
+            DEBUG_COLOR(34)
             break;
         case '-':
             decrement((*bfInstance));
+            DEBUG_COLOR(34)
             break;
         case '>':
             incrementPointer(bfInstance);
+            DEBUG_COLOR(33)
             break;
         case '<':
             if (!decrementPointer(bfInstance)){
+                DEBUG_COLOR(31)
                 printf("\nOut of Range: Index smaller than 0\n");
                 return NULL;
             }
+            DEBUG_COLOR(33)
             break;
         case '[':
+            DEBUG_COLOR(32)
             brainfuckIterator = interpretSection(brainfuckIterator + 1, bfInstance, debug);
             if (brainfuckIterator == NULL){
                 return NULL;
             }
             break;
         case ']':
+            DEBUG_COLOR(32)
             if ((*bfInstance)->value == 0){
                 return brainfuckIterator;
             }
@@ -79,9 +88,12 @@ char *interpretSection(char *brainfuck, Node **bfInstance, char debug){
         || *brainfuckIterator == ']'
         || *brainfuckIterator == '<'
         || *brainfuckIterator == '>')){
+
             printf("%c ", *brainfuckIterator);
+            DEBUG_COLOR(39)
             printDebugMessage(*bfInstance);
         }
+
         brainfuckIterator++;
     }
     return NULL;
