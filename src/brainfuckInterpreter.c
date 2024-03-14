@@ -22,62 +22,63 @@ int main(int argc, char **argv) {
     return 0;
 }
 
-void interpret(char *brainfuck, char debug) {
+void interpret(char *brainfuck, char debug){
     Node *bfInstance = createNewNode();
-    if (debug) {
-        printf("  [Value | Character | Index]\n  ");
+    if (debug){
+        printf("%12s %10s | %10s | %10s ]\n","[", "Value", "Character", "Index");
         printDebugMessage(bfInstance);
     }
     interpretSection(brainfuck, &bfInstance, debug);
 }
 
-char *interpretSection(char *brainfuck, Node **bfInstance, char debug) {
+char *interpretSection(char *brainfuck, Node **bfInstance, char debug){
     char *brainfuckIterator = brainfuck;
-    while (*brainfuckIterator != '\0') {
-        switch (*brainfuckIterator) {
-            case '.':
+    while (*brainfuckIterator != '\0'){
+        switch (*brainfuckIterator){
+        case '.':
+            if(!debug){
                 printf("%c", (*bfInstance)->value);
-                break;
-            case ',':
-                (*bfInstance)->value = getchar();
-                break;
-            case '+':
-                increment((*bfInstance));
-                break;
-            case '-':
-                decrement((*bfInstance));
-                break;
-            case '>':
-                incrementPointer(bfInstance);
-                break;
-            case '<':
-                if (!decrementPointer(bfInstance)) {
-                    printf("\nOut of Range: Index smaller than 0\n");
-                    return NULL;
-                }
-                break;
-            case '[':
-                brainfuckIterator = interpretSection(brainfuckIterator + 1, bfInstance, debug);
-                if (brainfuckIterator == NULL) {
-                    return NULL;
-                }
-                break;
-            case ']':
-                if ((*bfInstance)->value == 0) {
-                    return brainfuckIterator;
-                }
-                brainfuckIterator = brainfuck - 1;
-                break;
+            }
+            break;
+        case ',':
+            (*bfInstance)->value = getchar();
+            break;
+        case '+':
+            increment((*bfInstance));
+            break;
+        case '-':
+            decrement((*bfInstance));
+            break;
+        case '>':
+            incrementPointer(bfInstance);
+            break;
+        case '<':
+            if (!decrementPointer(bfInstance)){
+                printf("\nOut of Range: Index smaller than 0\n");
+                return NULL;
+            }
+            break;
+        case '[':
+            brainfuckIterator = interpretSection(brainfuckIterator + 1, bfInstance, debug);
+            if (brainfuckIterator == NULL){
+                return NULL;
+            }
+            break;
+        case ']':
+            if ((*bfInstance)->value == 0){
+                return brainfuckIterator;
+            }
+            brainfuckIterator = brainfuck - 1;
+            break;
         }
-        if (debug && (
-            *brainfuckIterator == '+'
-            || *brainfuckIterator == '-'
-            || *brainfuckIterator == '.'
-            || *brainfuckIterator == ','
-            || *brainfuckIterator == '['
-            || *brainfuckIterator == ']'
-            || *brainfuckIterator == '<'
-            || *brainfuckIterator == '>')) {
+        if (debug && (*brainfuckIterator == '+'
+        || *brainfuckIterator == '-'
+        || *brainfuckIterator == '.'
+        || *brainfuckIterator == ','
+        || *brainfuckIterator == '['
+        || *brainfuckIterator == ']'
+        || *brainfuckIterator == '<'
+        || *brainfuckIterator == '>')){
             printf("%c ", *brainfuckIterator);
             printDebugMessage(*bfInstance);
         }
@@ -86,11 +87,36 @@ char *interpretSection(char *brainfuck, Node **bfInstance, char debug) {
     return NULL;
 }
 
-void printDebugMessage(Node *bfInstance) {
-    printf("[%d | %c | %d]\n", bfInstance->value, bfInstance->value, bfInstance->index);
+void printDebugMessage(Node *bfInstance){
+    printf("%10s", "[");
+    DEBUG_COLOR(35)
+    printf("%10d | ", bfInstance->value);
+    DEBUG_COLOR(31);
+
+    printf("%10s | ", getNonVisualChars(bfInstance));
+    DEBUG_COLOR(32)
+    printf("%10d ", bfInstance->index);
+    DEBUG_COLOR(39)
+    printf("]\n");
 }
 
-Node *createNewNode() {
+char *getNonVisualChars(Node *bfInstance){
+    char bfValue = (char)bfInstance->value;
+    char *nonVisualChars[] = {
+        "NUL", "SOH", "STX", "ETX", "EOT", "ENQ", "ACK", "BEL", "BS", "TAB",
+        "LF", "VT", "FF", "CR", "SO", "SI", "DLE", "DC1", "DC2", "DC3",
+        "DC4", "NAK", "SYN", "ETB", "CAN", "EM", "SUB", "ESC", "FS", "GS",
+        "RS", "US"
+    };
+
+    if ((int)bfValue >= 0 && (int)bfValue <= 31) {
+        return nonVisualChars[(int)bfValue];
+    } else {
+        return (char *)&bfInstance->value;
+    }
+}
+
+Node *createNewNode(){
     Node *newNode = malloc(sizeof(Node));
     newNode->value = 0;
     newNode->index = 0;
@@ -99,8 +125,9 @@ Node *createNewNode() {
     return newNode;
 }
 
-void incrementPointer(Node **bfInstance) {
-    if ((*bfInstance)->next != NULL) {
+void incrementPointer(Node **bfInstance){
+    if ((*bfInstance)->next != NULL)
+    {
         *bfInstance = (*bfInstance)->next;
         return;
     }
@@ -110,35 +137,38 @@ void incrementPointer(Node **bfInstance) {
     *bfInstance = (*bfInstance)->next;
 }
 
-char decrementPointer(Node **bfInstance) {
-    if ((*bfInstance)->previous == NULL) {
+char decrementPointer(Node **bfInstance){
+    if ((*bfInstance)->previous == NULL)
+    {
         return FALSE;
     }
     *bfInstance = (*bfInstance)->previous;
     return TRUE;
 }
 
-size_t getFileLength(char *path) {
+size_t getFileLength(char *path){
     FILE *file = fopen(path, "r");
 
-    if (file == NULL) {
+    if (file == NULL)
+    {
         return 0;
     }
 
     char buffer[100];
     size_t length = 0;
     size_t bytesRead = 0;
-    while ((bytesRead = fread(buffer, sizeof(char), 100, file))) {
+    while ((bytesRead = fread(buffer, sizeof(char), 100, file)))
+    {
         length += bytesRead;
     }
     return length;
 }
 
-void readFile(char *path, char *content, size_t length) {
+void readFile(char *path, char *content, size_t length){
     FILE *file = fopen(path, "r");
 
-    if (file == NULL
-    || content == NULL) {
+    if (file == NULL || content == NULL)
+    {
         return;
     }
 

@@ -5,6 +5,8 @@
 
 #define increment(bfInstance) bfInstance->value++
 #define decrement(bfInstance) bfInstance->value--
+#define DEBUG_COLOR(COL) printf("\x1b[%dm",COL);
+
 
 struct structNode  {
     int value;
@@ -20,4 +22,5 @@ char *interpretSection(char *brainfuck, Node **bfInstance, char debug);
 char decrementPointer(Node **bfInstance);
 void incrementPointer(Node **bfInstance);
 void printDebugMessage(Node *bfInstance);
+char* getNonVisualChars(Node * bfInstance);
 Node *createNewNode();
