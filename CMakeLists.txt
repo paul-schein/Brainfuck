@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16.3)
 
-project(BrainfuckInterpreter VERSION 1.0)
+project(BrainfuckInterpreter C)
 
 add_subdirectory("${PROJECT_SOURCE_DIR}/src")
 
