@@ -105,111 +105,18 @@ void printDebugMessage(Node *bfInstance)
 char *getNonVisualChars(Node *bfInstance)
 {
     char bfValue = (char)bfInstance->value;
-    char *outputVal = "";
-    switch ((int)bfValue)
-    {
-    case 0:
-        outputVal = "NUL";
-        break;
-    case 1:
-        outputVal = "SOH";
-        break;
-    case 2:
-        outputVal = "STX";
-        break;
-    case 3:
-        outputVal = "ETX";
-        break;
-    case 4:
-        outputVal = "EOT";
-        break;
-    case 5:
-        outputVal = "ENQ";
-        break;
-    case 6:
-        outputVal = "ACK";
-        break;
-    case 7:
-        outputVal = "BEL";
-        break;
-    case 8:
-        outputVal = "BS";
-        break;
-    case 9:
-        outputVal = "TAB";
-        break;
-    case 10:
-        outputVal = "LF";
-        break;
-    case 11:
-        outputVal = "VT";
-        break;
-    case 12:
-        outputVal = "FF";
-        break;
-    case 13:
-        outputVal = "CR";
-        break;
-    case 14:
-        outputVal = "SO";
-        break;
-    case 15:
-        outputVal = "SI";
-        break;
-    case 16:
-        outputVal = "DLE";
-        break;
-    case 17:
-        outputVal = "DC1";
-        break;
-    case 18:
-        outputVal = "DC2";
-        break;
-    case 19:
-        outputVal = "DC3";
-        break;
-    case 20:
-        outputVal = "DC4";
-        break;
-    case 21:
-        outputVal = "NAK";
-        break;
-    case 22:
-        outputVal = "SYN";
-        break;
-    case 23:
-        outputVal = "ETB";
-        break;
-    case 24:
-        outputVal = "CAN";
-        break;
-    case 25:
-        outputVal = "EM";
-        break;
-    case 26:
-        outputVal = "SUB";
-        break;
-    case 27:
-        outputVal = "ESC";
-        break;
-    case 28:
-        outputVal = "FS";
-        break;
-    case 29:
-        outputVal = "GS";
-        break;
-    case 30:
-        outputVal = "RS";
-        break;
-    case 31:
-        outputVal = "US";
-        break;
-    default:
-        outputVal = (char *)&bfInstance->value;
-        break;
-    }
+    char *nonVisualChars[] = {
+        "NUL", "SOH", "STX", "ETX", "EOT", "ENQ", "ACK", "BEL", "BS", "TAB",
+        "LF", "VT", "FF", "CR", "SO", "SI", "DLE", "DC1", "DC2", "DC3",
+        "DC4", "NAK", "SYN", "ETB", "CAN", "EM", "SUB", "ESC", "FS", "GS",
+        "RS", "US"
+    };
 
-    return outputVal;
+    if ((int)bfValue >= 0 && (int)bfValue <= 31) {
+        return nonVisualChars[(int)bfValue];
+    } else {
+        return (char *)&bfInstance->value;
+    }
 }
 
 Node *createNewNode()
