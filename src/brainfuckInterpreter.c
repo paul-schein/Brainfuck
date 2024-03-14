@@ -108,26 +108,18 @@ void handleDebug(const char current,Node* bfInstance, const char debug) {
 
         switch (current) {
             case '.':
-                DEBUG_COLOR(35)
-            break;
             case ',':
                 DEBUG_COLOR(35)
             break;
             case '+':
-                DEBUG_COLOR(34)
-            break;
             case '-':
                 DEBUG_COLOR(34)
             break;
             case '>':
-                DEBUG_COLOR(33)
-            break;
             case '<':
                 DEBUG_COLOR(33)
             break;
             case '[':
-                DEBUG_COLOR(32)
-            break;
             case ']':
                 DEBUG_COLOR(32)
             break;
@@ -196,7 +188,7 @@ size_t getFileLength(const char *path){
 
     char buffer[100];
     size_t length = 0;
-    size_t bytesRead = 0;
+    size_t bytesRead;
     while ((bytesRead = fread(buffer, sizeof(char), 100, file)))
     {
         length += bytesRead;
