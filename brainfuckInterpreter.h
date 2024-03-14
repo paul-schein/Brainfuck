@@ -22,4 +22,5 @@ char *interpretSection(char *brainfuck, Node **bfInstance, char debug);
 char decrementPointer(Node **bfInstance);
 void incrementPointer(Node **bfInstance);
 void printDebugMessage(Node *bfInstance);
+char* getNonVisualChars(Node * bfInstance);
 Node *createNewNode();

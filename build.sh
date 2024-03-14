@@ -1,4 +1,5 @@
 #!/bin/sh
+clear
 
 if (test -d ./build); then
     rm -r ./build
