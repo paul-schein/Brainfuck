@@ -1,3 +1,4 @@
+#pragma once
 #include <string.h>
 
 #define TRUE 1
@@ -15,8 +16,8 @@ struct structNode  {
     struct structNode *next;
 } typedef Node;
 
-size_t getFileLength(char *path);
-void readFile(char *path, char *content, size_t length);
+size_t getFileLength(const char *path);
+void readFile(const char *path, char *content, size_t length);
 void interpret(char *brainfuck, char debug);
 char *interpretSection(char *brainfuck, Node **bfInstance, char debug);
 char decrementPointer(Node **bfInstance);
@@ -24,3 +25,4 @@ void incrementPointer(Node **bfInstance);
 void printDebugMessage(Node *bfInstance);
 char* getNonVisualChars(Node * bfInstance);
 Node *createNewNode();
+void handleDebug(char current,Node* bfInstance,const char debug);
