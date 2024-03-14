@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define DEBUG_COLOR(COL) printf("\x1b[%dm",COL);
+
 int main(int argc, char **argv) {
     if (argc < 2) {
         return 1;
@@ -85,7 +87,9 @@ char *interpretSection(char *brainfuck, Node **bfInstance, char debug) {
 }
 
 void printDebugMessage(Node *bfInstance) {
+    DEBUG_COLOR(35)
     printf("[%d | %c | %d]\n", bfInstance->value, bfInstance->value, bfInstance->index);
+    DEBUG_COLOR(39)
 }
 
 Node *createNewNode() {
