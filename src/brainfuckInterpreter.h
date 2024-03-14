@@ -25,4 +25,4 @@ void incrementPointer(Node **bfInstance);
 void printDebugMessage(Node *bfInstance);
 char* getNonVisualChars(Node * bfInstance);
 Node *createNewNode();
-void handleDebug(char current,Node* bfInstance,const char debug);
+void handleDebug(char current,Node* bfInstance, char debug);

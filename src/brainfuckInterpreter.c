@@ -23,7 +23,7 @@ int main(const int argc, char **argv) {
     return 0;
 }
 
-void interpret(char *brainfuck, char debug){
+void interpret(char *brainfuck, const char debug){
     Node *bfInstance = createNewNode();
     if (debug){
         printf("%12s %10s | %10s | %10s ]\n","[", "Value", "Character", "Index");
@@ -32,7 +32,7 @@ void interpret(char *brainfuck, char debug){
     interpretSection(brainfuck, &bfInstance, debug);
 }
 
-char *interpretSection(char *brainfuck, Node **bfInstance, char debug){
+char *interpretSection(char *brainfuck, Node **bfInstance, const char debug){
     char *brainfuckIterator = brainfuck;
     while (*brainfuckIterator != '\0'){
         switch (*brainfuckIterator){
@@ -96,7 +96,7 @@ void printDebugMessage(Node *bfInstance){
     printf("]\n");
 }
 
-void handleDebug(char current,Node* bfInstance, const char debug) {
+void handleDebug(const char current,Node* bfInstance, const char debug) {
     if (debug && (current == '+'
             || current == '-'
             || current == '.'
@@ -143,7 +143,7 @@ void handleDebug(char current,Node* bfInstance, const char debug) {
 }
 
 char *getNonVisualChars(Node *bfInstance){
-    char bfValue = (char)bfInstance->value;
+    const char bfValue = bfInstance->value;
     char *nonVisualChars[] = {
         "NUL", "SOH", "STX", "ETX", "EOT", "ENQ", "ACK", "BEL", "BS", "TAB",
         "LF", "VT", "FF", "CR", "SO", "SI", "DLE", "DC1", "DC2", "DC3",
@@ -151,11 +151,9 @@ char *getNonVisualChars(Node *bfInstance){
         "RS", "US"
     };
 
-    if ((int)bfValue >= 0 && (int)bfValue <= 31) {
-        return nonVisualChars[(int)bfValue];
-    } else {
-        return (char *)&bfInstance->value;
-    }
+    return (int)bfValue >= 0 && (int)bfValue <= 31
+    ? nonVisualChars[(int)bfValue]
+    : (char *)&bfInstance->value;
 }
 
 Node *createNewNode(){
