@@ -2,11 +2,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int main(int argc, char **argv) {
+int main(const int argc, char **argv) {
+    DEBUG_COLOR(1)
     if (argc < 2) {
         return 1;
     }
-    unsigned int length = getFileLength(argv[1]);
+    const unsigned int length = getFileLength(argv[1]);
     if (length <= 0) {
         return 1;
     }
@@ -51,9 +52,11 @@ char *interpretSection(char *brainfuck, Node **bfInstance, char debug){
             break;
         case '>':
             incrementPointer(bfInstance);
+
             break;
         case '<':
             if (!decrementPointer(bfInstance)){
+                DEBUG_COLOR(31)
                 printf("\nOut of Range: Index smaller than 0\n");
                 return NULL;
             }
@@ -70,18 +73,11 @@ char *interpretSection(char *brainfuck, Node **bfInstance, char debug){
             }
             brainfuckIterator = brainfuck - 1;
             break;
+        default:
+            break;
         }
-        if (debug && (*brainfuckIterator == '+'
-        || *brainfuckIterator == '-'
-        || *brainfuckIterator == '.'
-        || *brainfuckIterator == ','
-        || *brainfuckIterator == '['
-        || *brainfuckIterator == ']'
-        || *brainfuckIterator == '<'
-        || *brainfuckIterator == '>')){
-            printf("%c ", *brainfuckIterator);
-            printDebugMessage(*bfInstance);
-        }
+
+        handleDebug(*brainfuckIterator,*bfInstance,debug);
         brainfuckIterator++;
     }
     return NULL;
@@ -98,6 +94,52 @@ void printDebugMessage(Node *bfInstance){
     printf("%10d ", bfInstance->index);
     DEBUG_COLOR(39)
     printf("]\n");
+}
+
+void handleDebug(char current,Node* bfInstance, const char debug) {
+    if (debug && (current == '+'
+            || current == '-'
+            || current == '.'
+            || current == ','
+            || current == '['
+            || current == ']'
+            || current == '<'
+            || current == '>')){
+
+        switch (current) {
+            case '.':
+                DEBUG_COLOR(35)
+            break;
+            case ',':
+                DEBUG_COLOR(35)
+            break;
+            case '+':
+                DEBUG_COLOR(34)
+            break;
+            case '-':
+                DEBUG_COLOR(34)
+            break;
+            case '>':
+                DEBUG_COLOR(33)
+            break;
+            case '<':
+                DEBUG_COLOR(33)
+            break;
+            case '[':
+                DEBUG_COLOR(32)
+            break;
+            case ']':
+                DEBUG_COLOR(32)
+            break;
+            default:
+                break;
+        }
+
+        printf("%c ", current);
+        DEBUG_COLOR(39)
+        printDebugMessage(bfInstance);
+    }
+
 }
 
 char *getNonVisualChars(Node *bfInstance){
@@ -146,7 +188,7 @@ char decrementPointer(Node **bfInstance){
     return TRUE;
 }
 
-size_t getFileLength(char *path){
+size_t getFileLength(const char *path){
     FILE *file = fopen(path, "r");
 
     if (file == NULL)
@@ -164,7 +206,7 @@ size_t getFileLength(char *path){
     return length;
 }
 
-void readFile(char *path, char *content, size_t length){
+void readFile(const char *path, char *content, const size_t length){
     FILE *file = fopen(path, "r");
 
     if (file == NULL || content == NULL)
