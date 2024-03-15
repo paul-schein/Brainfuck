@@ -18,8 +18,8 @@ int main(const int argc, char **argv) {
 
     interpret(content, argc > 2 && argv[2][0] == '-' && argv[2][1] == 'd');
 
-    char *out;
-    scanf("%s", &out);
+    char *out = "";
+    scanf("%s", out);
     return 0;
 }
 
@@ -27,7 +27,6 @@ void interpret(char *brainfuck, const char debug){
     Node *bfInstance = createNewNode();
     if (debug){
         printf("%12s %10s | %10s | %10s ]\n","[", "Value", "Character", "Index");
-        printDebugMessage(bfInstance);
     }
     interpretSection(brainfuck, &bfInstance, debug);
 }
@@ -35,6 +34,7 @@ void interpret(char *brainfuck, const char debug){
 char *interpretSection(char *brainfuck, Node **bfInstance, const char debug){
     char *brainfuckIterator = brainfuck;
     while (*brainfuckIterator != '\0'){
+        handleDebugSymbol(*brainfuckIterator, debug);
         switch (*brainfuckIterator){
         case '.':
             if(!debug){
@@ -52,7 +52,6 @@ char *interpretSection(char *brainfuck, Node **bfInstance, const char debug){
             break;
         case '>':
             incrementPointer(bfInstance);
-
             break;
         case '<':
             if (!decrementPointer(bfInstance)){
@@ -76,15 +75,14 @@ char *interpretSection(char *brainfuck, Node **bfInstance, const char debug){
         default:
             break;
         }
-
-        handleDebug(*brainfuckIterator,*bfInstance,debug);
+        handleDebugMessage(*bfInstance,debug);
         brainfuckIterator++;
     }
     return NULL;
 }
 
 void printDebugMessage(Node *bfInstance){
-    printf("%10s", "[");
+    printf(" %10s", "[");
     DEBUG_COLOR(35)
     printf("%10d | ", bfInstance->value);
     DEBUG_COLOR(31);
@@ -93,7 +91,13 @@ void printDebugMessage(Node *bfInstance){
     DEBUG_COLOR(32)
     printf("%10d ", bfInstance->index);
     DEBUG_COLOR(39)
-    printf("]\n");
+    printf("]");
+}
+
+void handleDebugMessage(Node *bfInstance, const char debug) {
+    if (debug) {
+        printDebugMessage(bfInstance);
+    }
 }
 
 void handleDebug(const char current,Node* bfInstance, const char debug) {
@@ -127,11 +131,50 @@ void handleDebug(const char current,Node* bfInstance, const char debug) {
                 break;
         }
 
-        printf("%c ", current);
+        printf("\n%c", current);
         DEBUG_COLOR(39)
         printDebugMessage(bfInstance);
     }
+}
 
+void handleDebugSymbol(const char symbol, const char debug) {
+    if (!debug || !isRelevantSymbol(symbol)) {
+        return;
+    }
+    switch (symbol) {
+        case '.':
+        case ',':
+            DEBUG_COLOR(35)
+        break;
+        case '+':
+        case '-':
+            DEBUG_COLOR(34)
+        break;
+        case '>':
+        case '<':
+            DEBUG_COLOR(33)
+        break;
+        case '[':
+        case ']':
+            DEBUG_COLOR(32)
+        break;
+        default:
+            break;
+    }
+
+    printf("\n%c", symbol);
+    DEBUG_COLOR(39)
+}
+
+char isRelevantSymbol(const char symbol) {
+    return symbol == '+'
+            || symbol == '-'
+            || symbol == '.'
+            || symbol == ','
+            || symbol == '['
+            || symbol == ']'
+            || symbol == '<'
+            || symbol == '>';
 }
 
 char *getNonVisualChars(Node *bfInstance){

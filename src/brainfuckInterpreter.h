@@ -17,12 +17,15 @@ struct structNode  {
 } typedef Node;
 
 size_t getFileLength(const char *path);
-void readFile(const char *path, char *content, size_t length);
+void readFile(const char *path, char *content, const size_t length);
 void interpret(char *brainfuck, char debug);
-char *interpretSection(char *brainfuck, Node **bfInstance, char debug);
+char *interpretSection(char *brainfuck, Node **bfInstance, const char debug);
 char decrementPointer(Node **bfInstance);
 void incrementPointer(Node **bfInstance);
 void printDebugMessage(Node *bfInstance);
 char* getNonVisualChars(Node * bfInstance);
 Node *createNewNode();
-void handleDebug(char current,Node* bfInstance, char debug);
+void handleDebug(char current,Node* bfInstance, const char debug);
+char isRelevantSymbol(const char symbol);
+void handleDebugSymbol(const char symbol, const char debug);
+void handleDebugMessage(Node *bfInstance, const char debug);
