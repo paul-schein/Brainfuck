@@ -20,8 +20,9 @@ int main(const int argc, char **argv) {
 
     interpret(content, argc > 2 && argv[2][0] == '-' && argv[2][1] == 'd');
 
-    char *out = "";
+    char out[1];
     printf("\n");
-    scanf("%s", out);
+    scanf("%1s", out);
+
     return 0;
 }
