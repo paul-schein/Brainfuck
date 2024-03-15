@@ -101,43 +101,6 @@ void handleDebugMessage(Node *bfInstance, const char debug) {
     }
 }
 
-void handleDebug(const char current,Node* bfInstance, const char debug) {
-    if (debug && (current == '+'
-            || current == '-'
-            || current == '.'
-            || current == ','
-            || current == '['
-            || current == ']'
-            || current == '<'
-            || current == '>')){
-
-        switch (current) {
-            case '.':
-            case ',':
-                DEBUG_COLOR(35)
-            break;
-            case '+':
-            case '-':
-                DEBUG_COLOR(34)
-            break;
-            case '>':
-            case '<':
-                DEBUG_COLOR(33)
-            break;
-            case '[':
-            case ']':
-                DEBUG_COLOR(32)
-            break;
-            default:
-                break;
-        }
-
-        printf("\n%c", current);
-        DEBUG_COLOR(39)
-        printDebugMessage(bfInstance);
-    }
-}
-
 void handleDebugSymbol(const char symbol, const char debug) {
     if (!debug || !isRelevantSymbol(symbol)) {
         return;
